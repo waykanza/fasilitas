@@ -1,0 +1,84 @@
+<?php 
+# LAIN-LAIN
+$query = "
+DECLARE @persen_ppn NUMERIC(5,2) = (SELECT TOP 1 PERSEN_PPN FROM KWT_PARAMETER) 
+
+INSERT INTO KWT_PEMBAYARAN_AI_TEMP
+(
+	ID_PEMBAYARAN,
+	TRX,
+	
+	PERIODE_TAG,
+	PERIODE_IPL_AWAL,
+	PERIODE_IPL_AKHIR,
+	JUMLAH_PERIODE_IPL,
+	TGL_JATUH_TEMPO, 
+	
+	NO_PELANGGAN, 
+	
+	KODE_SEKTOR, 
+	KODE_CLUSTER, 
+	KODE_BLOK, 
+	STATUS_BLOK, 
+	
+	GOLONGAN,
+	
+	AKTIF_IPL,
+	KEY_IPL, 
+	
+	LUAS_KAVLING, 
+	
+	JUMLAH_IPL, 
+	
+	PERSEN_PPN, 
+	
+	USER_CREATED,
+	KET_IVC
+)
+SELECT 
+	((CASE WHEN p.STATUS_BLOK = $trx_bg THEN '$trx_lbg' WHEN p.STATUS_BLOK = $trx_rv THEN '$trx_lrv' END) + '#$periode_tag#' + p.NO_PELANGGAN) AS ID_PEMBAYARAN,
+	(CASE WHEN p.STATUS_BLOK = $trx_bg THEN $trx_lbg WHEN p.STATUS_BLOK = $trx_rv THEN $trx_lrv END) AS TRX,
+	
+	'$periode_tag' AS PERIODE_TAG, 
+	d.PERIODE_IPL_AWAL AS PERIODE_IPL_AWAL, 
+	d.PERIODE_IPL_AKHIR AS PERIODE_IPL_AKHIR, 
+	d.JUMLAH_PERIODE_IPL AS JUMLAH_PERIODE_IPL, 
+	'$tgl_jatuh_tempo_lain_lain', 
+	
+	p.NO_PELANGGAN,
+	
+	p.KODE_SEKTOR,
+	p.KODE_CLUSTER,
+	p.KODE_BLOK,
+	p.STATUS_BLOK,
+	
+	p.GOLONGAN,
+	
+	1 AS AKTIF_IPL,
+	p.KEY_IPL, 
+	
+	p.LUAS_KAVLING AS LUAS_KAVLING,
+	
+	d.NILAI_LAIN_LAIN AS JUMLAH_IPL,
+	
+	@persen_ppn AS PERSEN_PPN, 
+	
+	'$sess_id_user' AS USER_CREATED,
+	d.KET_LAIN_LAIN AS KET_IVC 
+FROM 
+	KWT_PELANGGAN p
+	JOIN KWT_PERIODE_DEPOSIT d ON p.KODE_BLOK = d.KODE_BLOK AND 
+		d.STATUS_PROSES = 0 AND 
+		d.NILAI_LAIN_LAIN > 0 AND 
+		d.PERIODE_IPL_AWAL = '$periode_tag' 
+WHERE
+	p.DISABLED = 0 AND 
+	p.STATUS_BLOK IN ($trx_bg, $trx_rv) 
+	
+	$where_single_blok
+	
+ORDER BY p.KODE_BLOK ASC
+";
+
+ex_false($conn->Execute($query), "Error Insert BG & RV Lain-lain, Hubungi Developer/MSI !!");	
+

@@ -1,0 +1,1 @@
+server=(local);Database=dbkwitansi;Trusted_Connection=Yes;

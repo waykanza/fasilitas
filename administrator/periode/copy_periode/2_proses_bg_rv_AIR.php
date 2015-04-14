@@ -1,0 +1,92 @@
+<?php 
+$query = "
+DECLARE @persen_ppn NUMERIC(5,2) = (SELECT TOP 1 ISNULL(PERSEN_PPN,0) FROM KWT_PARAMETER)
+
+INSERT INTO KWT_PEMBAYARAN_AI_TEMP
+(
+	ID_PEMBAYARAN,
+	TRX,
+	
+	PERIODE_TAG,
+	PERIODE_AIR,
+	TGL_JATUH_TEMPO,
+	
+	NO_PELANGGAN,
+	
+	KODE_SEKTOR,
+	KODE_CLUSTER,
+	KODE_BLOK,
+	STATUS_BLOK,
+	KODE_ZONA,
+	
+	GOLONGAN,
+	TIPE_DENDA,
+	
+	AKTIF_AIR,
+	
+	KEY_AIR,
+	
+	STAND_AKHIR,
+	STAND_LALU,
+	
+	LUAS_KAVLING,
+	
+	PERSEN_PPN, 
+	
+	USER_CREATED,
+	KET_IVC
+)
+SELECT 
+	(CAST(p.STATUS_BLOK AS VARCHAR(1)) + '#$periode_tag#' + p.NO_PELANGGAN) AS ID_PEMBAYARAN,
+	p.STATUS_BLOK AS TRX,
+	
+	'$periode_tag' AS PERIODE_TAG,
+	'$periode_air' AS PERIODE_AIR,
+	'$tgl_jatuh_tempo_air_ipl',
+	
+	p.NO_PELANGGAN,
+	
+	p.KODE_SEKTOR,
+	p.KODE_CLUSTER,
+	p.KODE_BLOK,
+	p.STATUS_BLOK,
+	(CASE WHEN p.AKTIF_AIR = 1 THEN p.KODE_ZONA END) AS KODE_ZONA,
+	
+	p.GOLONGAN,
+	p.TIPE_DENDA,
+	
+	p.AKTIF_AIR, 
+	
+	p.KEY_AIR, 
+	
+	0 AS STAND_AKHIR,
+	(CASE WHEN p.AKTIF_AIR = 1 THEN ISNULL(b.STAND_AKHIR, 0) ELSE 0 END) AS STAND_LALU,
+	
+	p.LUAS_KAVLING AS LUAS_KAVLING,
+	
+	@persen_ppn AS PERSEN_PPN, 
+	
+	'$sess_id_user' AS USER_CREATED,
+	'$ket_ivc_bg_rv_air' AS KET_IVC 
+FROM 
+	KWT_PELANGGAN p 
+	LEFT JOIN KWT_PEMBAYARAN_AI b ON p.NO_PELANGGAN = b.NO_PELANGGAN AND 
+		$where_trx_air_ipl AND 
+		b.PERIODE_AIR = '$periode_air_prev' AND 
+		b.AKTIF_AIR = 1 
+	
+WHERE
+	p.DISABLED = 0 AND 
+	p.STATUS_BLOK IN ($trx_bg, $trx_rv) AND 
+	
+	(CAST(p.STATUS_BLOK AS VARCHAR(1)) + '#$periode_tag#' + p.NO_PELANGGAN) 
+	NOT IN 
+	(SELECT ID_PEMBAYARAN FROM KWT_PEMBAYARAN_AI_TEMP)
+	
+	$where_single_blok
+	
+ORDER BY p.KODE_BLOK ASC
+";
+
+ex_false($conn->Execute($query), "Error Insert BG & RV AIR, Hubungi Developer/MSI !!");
+

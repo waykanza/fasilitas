@@ -1,0 +1,101 @@
+<?php 
+$query = "
+DECLARE @persen_ppn NUMERIC(5,2) = (SELECT TOP 1 ISNULL(PERSEN_PPN,0) FROM KWT_PARAMETER)
+
+INSERT INTO KWT_PEMBAYARAN_AI_TEMP
+(
+	ID_PEMBAYARAN,
+	TRX,
+	
+	PERIODE_TAG,
+	PERIODE_IPL_AWAL,
+	PERIODE_IPL_AKHIR,
+	JUMLAH_PERIODE_IPL,
+	TGL_JATUH_TEMPO,
+	
+	NO_PELANGGAN,
+	
+	KODE_SEKTOR,
+	KODE_CLUSTER,
+	KODE_BLOK,
+	STATUS_BLOK,
+	KODE_ZONA,
+	
+	GOLONGAN,
+	
+	AKTIF_IPL,
+	
+	KEY_IPL,
+	
+	LUAS_KAVLING,
+	TARIF_IPL,
+	JUMLAH_IPL,
+	
+	DISKON_IPL,
+	TGL_DISKON_IPL,
+	USER_DISKON_IPL,
+	
+	PERSEN_PPN, 
+	
+	USER_CREATED,
+	KET_IVC
+)
+SELECT 
+	(CAST(p.STATUS_BLOK AS VARCHAR(1)) + '#$periode_tag#' + p.NO_PELANGGAN) AS ID_PEMBAYARAN,
+	p.STATUS_BLOK AS TRX,
+	
+	'$periode_tag' AS PERIODE_TAG,
+	(CASE WHEN p.AKTIF_IPL = 1 THEN '$periode_ipl_awal' END) AS PERIODE_IPL_AWAL,
+	(CASE WHEN p.AKTIF_IPL = 1 THEN '$periode_ipl_akhir' END) AS PERIODE_IPL_AKHIR,
+	(CASE WHEN p.AKTIF_IPL = 1 THEN '$jumlah_periode_ipl' END) AS JUMLAH_PERIODE_IPL,
+	'$tgl_jatuh_tempo_air_ipl',
+	
+	p.NO_PELANGGAN,
+	
+	p.KODE_SEKTOR,
+	p.KODE_CLUSTER,
+	p.KODE_BLOK,
+	p.STATUS_BLOK,
+	(CASE WHEN p.AKTIF_AIR = 1 THEN p.KODE_ZONA END) AS KODE_ZONA,
+	
+	p.GOLONGAN,
+	
+	p.AKTIF_IPL, 
+	
+	p.KEY_IPL,
+	
+	p.LUAS_KAVLING AS LUAS_KAVLING,
+	ISNULL(i.TARIF_IPL,0) AS TARIF_IPL,
+	(
+		CASE WHEN p.AKTIF_IPL = 1
+		THEN
+			CASE WHEN i.TIPE_TARIF_IPL = 1 
+			THEN (p.LUAS_KAVLING * ISNULL(i.TARIF_IPL,0)) * $jumlah_periode_ipl
+			ELSE ISNULL(i.TARIF_IPL,0) * $jumlah_periode_ipl END
+		ELSE 0 END
+	) AS JUMLAH_IPL,
+	
+	$diskon_ipl AS DISKON_IPL,
+	$tgl_diskon_ipl AS TGL_DISKON_IPL,
+	$user_diskon_ipl AS USER_DISKON_IPL,
+	
+	@persen_ppn AS PERSEN_PPN, 
+	
+	'$sess_id_user' AS USER_CREATED,
+	'$ket_ivc_kv_hn' AS KET_IVC 
+FROM 
+	KWT_PELANGGAN p 
+	LEFT JOIN KWT_TARIF_IPL i ON p.KEY_IPL = i.KEY_IPL
+WHERE
+	p.DISABLED = 0 AND 
+	p.STATUS_BLOK = $trx_kv  
+	
+	$where_single_blok
+	
+ORDER BY p.KODE_BLOK ASC
+";
+
+ex_false($conn->Execute($query), "Error Insert KV IPL, Hubungi Developer/MSI !!");
+
+
+

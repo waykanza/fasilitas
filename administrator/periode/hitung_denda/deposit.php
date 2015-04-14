@@ -1,0 +1,35 @@
+<?php
+$query = "
+DECLARE 
+@now DATE = DATEADD(MONTH, 0, '$now_periode')
+
+UPDATE b 
+SET 
+	b.DENDA = 
+	( 
+			CASE WHEN ti.GOLONGAN = '1' 
+			THEN 
+				(ROUND (( 
+					( 
+						(DENDA_BISNIS_IPL / 100) * 
+						((ISNULL(JUMLAH_AIR,0) + ISNULL(b.ABONEMEN,0) + ISNULL(JUMLAH_IPL,0)) - (ISNULL(DISKON_RUPIAH_AIR,0) + ISNULL(DISKON_RUPIAH_IPL,0))) 
+					) * DATEDIFF(MONTH, dbo.PTDF(b.PERIODE), @now)
+				) / 100 , 0) * 100)
+			ELSE 
+				(ROUND (( 
+					( 
+						(DENDA_STANDAR_IPL / 100) * 
+						((ISNULL(JUMLAH_AIR,0) + ISNULL(b.ABONEMEN,0) + ISNULL(JUMLAH_IPL,0)) - (ISNULL(DISKON_RUPIAH_AIR,0) + ISNULL(DISKON_RUPIAH_IPL,0))) 
+					) * DATEDIFF(MONTH, dbo.PTDF(b.PERIODE), @now)
+				) / 100 , 0) * 100)
+			END 
+	)
+FROM 
+	KWT_PEMBAYARAN_AI b 
+	LEFT JOIN KWT_TARIF_IPL i ON b.KEY_IPL = i.KEY_IPL 
+	LEFT JOIN KWT_TIPE_IPL ti ON i.KODE_TIPE = ti.KODE_TIPE 
+WHERE 
+	$where_trx_deposit AND 
+	b.STATUS_BAYAR IS NULL AND 
+	DATEDIFF(MONTH, dbo.PTDF(b.PERIODE), @now) > 0
+";

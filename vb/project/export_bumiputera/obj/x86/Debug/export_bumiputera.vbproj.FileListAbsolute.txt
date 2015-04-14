@@ -1,0 +1,11 @@
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Debug\export.exe
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Debug\export.pdb
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Debug\export.xml
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\ResolveAssemblyReference.cache
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\export_bumiputera.vbproj.ResolveComReference.cache
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\export_bumiputera.Resources.resources
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\GenerateResource.read.1.tlog
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\GenerateResource.write.1.tlog
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\export.exe
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\export.xml
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Debug\export.pdb

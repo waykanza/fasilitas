@@ -1,0 +1,17 @@
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Release\export_bumiputera.exe
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Release\export_bumiputera.pdb
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\bin\Release\export_bumiputera.xml
+F:\UwAmp\www\pkb\vb\export\bumiputra\export.exe
+F:\UwAmp\www\pkb\vb\export\bumiputra\export.pdb
+F:\UwAmp\www\pkb\vb\export\bumiputra\export.xml
+F:\UwAmp\www\pkb\vb\export\bumiputera\export.exe
+F:\UwAmp\www\pkb\vb\export\bumiputera\export.pdb
+F:\UwAmp\www\pkb\vb\export\bumiputera\export.xml
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\ResolveAssemblyReference.cache
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\export_bumiputera.vbproj.ResolveComReference.cache
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\export_bumiputera.Resources.resources
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\GenerateResource.read.1.tlog
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\GenerateResource.write.1.tlog
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\export.exe
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\export.xml
+F:\UwAmp\www\pkb\vb\project\export_bumiputera\obj\x86\Release\export.pdb
