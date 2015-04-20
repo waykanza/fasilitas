@@ -23,13 +23,13 @@ $conn = conn();
 <script type="text/javascript" src="../../../plugin/window/javascripts/window.js"></script>
 <script type="text/javascript" src="../../../config/js/main.js"></script>
 <script type="text/javascript">
-/* lookup 
+/* lookup */
 function get_lookup(nk)
 {
 	if (nk.length == 0) {
 		jQuery('#wrap_lookup').fadeOut(); 
 	} else if (nk.length >= 3) {
-		jQuery.post(base_master + 'pelanggan_lookup.php?act=list&no_ktp=' + nk, function(data) { 
+		jQuery.post(base_master + 'pelanggan_lookup.php?act=list&no_va=' + nk, function(data) { 
 			jQuery('#lookup_pelanggan').html(data);
 			if (data == '') {
 				jQuery('#wrap_lookup').fadeOut(); 
@@ -45,16 +45,14 @@ function cls_lookup() { jQuery('#wrap_lookup').fadeOut(); }
 function pp(nk)
 {
 	jQuery('#wrap_lookup').fadeOut();
-	jQuery.post(base_master + 'pelanggan_lookup.php?act=sel&no_ktp=' + nk, function(data) {
-		jQuery('#no_ktp').val(data.no_ktp);
+	jQuery.post(base_master + 'pelanggan_lookup.php?act=sel&no_va=' + nk, function(data) {
+		jQuery('#no_va').val(data.no_va);
 		jQuery('#nama_pelanggan').val(data.nama_pelanggan);
-		jQuery("#npwp").val(data.npwp);
 		jQuery('#no_telepon').val(data.no_telepon);
-		jQuery('#no_hp').val(data.no_hp);
 		jQuery('#alamat').val(data.alamat);
 	}, 'json');
 }
-*/
+
 
 function clear()
 {
@@ -111,12 +109,16 @@ function calculate(id)
 }
 
 jQuery(function($) {
-	$('#no_ktp').on('keyup', function(e) {
+	$('#no_va').on('keyup', function(e) {
 		e.preventDefault();
 		get_lookup(this.value);
 		return false;
 	});
-	
+	$(document).on('click', '#cari', function(e) {
+		e.preventDefault();
+		var url = base_periode + 'periode_mp/cari.php';
+		return false;
+	});
 	$('#kode_mp').on('change', function(e) {
 		e.preventDefault();
 		$('#kode_tipe').load(base_periode + 'periode_mp/opt_kategori_mp.php?kode_mp=' + $(this).val());
@@ -268,8 +270,9 @@ function del_blok(id)
 <form name="form" id="form" method="post">
 
 <table class="w50 f-left">
-<tr><td width="120">NO KTP</td><td>
-<input type="text" name="no_ktp" id="no_ktp" size="30" autocomplete="off" value="" maxlength="30">
+<tr><td width="120">NO VIRTUAL ACCOUNT</td><td>
+<input type="text" name="no_va" id="no_va" size="30" autocomplete="off" value="" maxlength="30">
+<input type="button" id="cari" value=" Cari ">
 <!--
 <div id="wrap_lookup">
 	<div id="lookup_close"><span onclick="cls_lookup()">Tutup [X]</span></div>
@@ -281,14 +284,8 @@ function del_blok(id)
 <tr><td>NAMA PELANGGAN</td><td>
 <input type="text" name="nama_pelanggan" id="nama_pelanggan" size="40" value=""></td></tr>
 
-<tr><td>NPWP</td><td>
-<input type="text" name="npwp" id="npwp" size="20" value=""></td></tr>
-
 <tr><td>NO TELEPON</td><td>
 <input type="text" name="no_telepon" id="no_telepon" size="20" value=""></td></tr>
-
-<tr><td>NO HP</td><td>
-<input type="text" name="no_hp" id="no_hp" size="20" value=""></td></tr>
 
 <tr><td>ALAMAT</td><td>
 <textarea name="alamat" id="alamat" rows="3" cols="40"></textarea></td></tr>

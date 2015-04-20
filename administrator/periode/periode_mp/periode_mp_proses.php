@@ -4,7 +4,7 @@ $conn = conn();
 $msg = '';
 $error = FALSE;
 
-$no_ktp			= (isset($_REQUEST['no_ktp'])) ? clean($_REQUEST['no_ktp']) : '';
+$no_va			= (isset($_REQUEST['no_va'])) ? clean($_REQUEST['no_va']) : '';
 $nama_pelanggan	= (isset($_REQUEST['nama_pelanggan'])) ? clean($_REQUEST['nama_pelanggan']) : '';
 $npwp			= (isset($_REQUEST['npwp'])) ? clean($_REQUEST['npwp']) : '';
 $no_telepon		= (isset($_REQUEST['no_telepon'])) ? clean($_REQUEST['no_telepon']) : '';
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	{
 		$conn->begintrans();
 		ex_empty($nama_pelanggan, 'Nama pelanggan harus diisi.');
-		/*ex_empty($no_ktp, 'No KTP harus diisi.');		
+		/*ex_empty($no_va, 'No KTP harus diisi.');		
 		ex_empty($no_hp, 'No HP harus diisi.');
 		ex_empty($alamat, 'Alamat harus diisi.'); */
 		ex_empty($kode_mp, 'Media Promosi harus diisi.');
@@ -40,11 +40,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 		$query = "
 		INSERT INTO KWT_PEMBAYARAN_MP(
-			NO_KTP, NAMA_PELANGGAN, NPWP, NO_TELEPON, NO_HP, ALAMAT, 
+			NO_KTP, NAMA_PELANGGAN, NO_TELEPON, ALAMAT, 
 			KODE_MP, KODE_TIPE, KODE_LOKASI, KEY_MPD, TARIF, KETERANGAN, KASIR, 
 			PEMBAYARAN, JUMLAH_PERIODE)
 		VALUES (
-			'$no_ktp', '$nama_pelanggan', '$npwp', '$no_telepon', '$no_hp', '$alamat', 
+			'$no_va', '$nama_pelanggan', '$no_telepon', '$alamat', 
 			'$kode_mp', '$kode_tipe', '$kode_lokasi', '$key_mpd', $tarif, '$keterangan', '$kasir', 
 			$pembayaran, $max)
 		";
