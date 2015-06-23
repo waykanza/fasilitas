@@ -55,7 +55,7 @@ body { height:100%; }
 		switch (trim(base64_decode($cmd)))
 		{
 			# Master
-			case 'parameter' 	: cmodul('101'); include('master/parameter/parameter_setup.php');break;
+			//case 'parameter' 	: cmodul('101'); include('master/parameter/parameter_setup.php');break;
 			case 'sektor'		: cmodul('102'); include('master/sektor/sektor_setup.php');break;
 			case 'cluster'		: cmodul('103'); include('master/cluster/cluster_setup.php');break;
 			case 'blok'			: cmodul('104'); include('master/blok/blok_setup.php');break;
@@ -73,8 +73,6 @@ body { height:100%; }
 				case 'tarif_ipl'		: cmodul('122'); include('master/tarif_ipl/tarif_ipl_setup.php');break;
 				case 'kategori_ipl'		: cmodul('123'); include('master/kategori_ipl/kategori_ipl_setup.php');break;
 				
-				
-				case 'pelanggan_baru'	: cmodul('134'); include('master/pelanggan/new/pelanggan_setup.php');break; 
 				
 				## Fasilitas
 				case 'pelanggan'			: include('master/fasilitas/pelanggan/pelanggan_setup.php');break; 
@@ -118,7 +116,7 @@ body { height:100%; }
 				case 'hapus_tagihan'		: cmodul('207'); include('periode/hapus_tagihan/hapus_tagihan_setup.php');break;
 				
 				case 'periode_mp'		: include('periode/periode_mp/periode_mp_setup.php');break;
-				case 'periode_sl'		: include('periode/periode_sl/periode_sl_setup.php');break;
+				case 'periode_pkl'		: include('periode/periode_pkl/periode_pkl_setup.php');break;
 				
 			# Bank
 				case 'export_bank'				: cmodul('301'); include('bank/export/export_setup.php');break;
@@ -139,6 +137,9 @@ body { height:100%; }
 				//case 'pembayaran_mp_abcd'		: include('pembayaran/fasilitas/mp/mp_abcd/mp_setup.php');break;
 				//case 'pembayaran_mp_ef'			: include('pembayaran/fasilitas/mp/mp_ef/mp_setup.php');break;
 				case 'pembayaran_mp'			: include('pembayaran/fasilitas/mp/mp_setup.php');break;
+				case 'pembayaran_pkl'			: include('pembayaran/fasilitas/pkl/pkl_setup.php');break;
+				case 'admin_pembayaran_mp'		: include('pembayaran/fasilitas/mp/admin_mp_setup.php');break;
+				case 'admin_pembayaran_pkl'		: include('pembayaran/fasilitas/pkl/admin_pkl_setup.php');break;
 				case 'pembayaran_pkl_baru'		: include('pembayaran/fasilitas/pkl/baru/pkl_setup.php');break;
 				case 'pembayaran_pkl_perpanjang': include('pembayaran/fasilitas/pkl/perpanjang/pkl_setup.php');break;
 				case 'pembayaran_ksp'			: include('pembayaran/fasilitas/ksp/ksp_setup.php');break;
@@ -181,12 +182,20 @@ body { height:100%; }
 					case 'pelanggan_rekap'			: cmodul('522'); include('laporan/pelanggan/pelanggan_rekap/pelanggan_rekap_setup.php');break;
 					case 'pelanggan_daftar'			: cmodul('523'); include('laporan/pelanggan/pelanggan_daftar/pelanggan_daftar_setup.php');break;
 				
+
 				case 'daftar_faktur_pajak'			: cmodul('524'); include('laporan/daftar_faktur_pajak/daftar_faktur_pajak_setup.php');break;
 				
+				##laporan_new
+				case 'laporan_mp'			: cmodul('525'); include('laporan/mp/laporan_setup.php');break;
+				case 'laporan_pkl'			: cmodul('526'); include('laporan/pkl/laporan_setup.php');break;
 			# Utilitas
 				## Invoice
-					case 'ai_invoice'			: cmodul('601'); include('invoice/air_ipl/invoice_setup.php');break; 
-					case 'dp_invoice'			: cmodul('602'); include('invoice/deposit/invoice_setup.php');break; 
+					case 'invois_mp'			: cmodul('601'); include('invoice/invois_mp/invoice_setup.php');break; 
+					case 'invois_pkl'			: cmodul('602'); include('invoice/invois_pkl/invoice_setup.php');break; 
+					case 'admin_invois_mp'			: cmodul('690'); include('invoice/invois_mp/admin_invoice_setup.php');break; 
+					case 'admin_invois_pkl'			: cmodul('691'); include('invoice/invois_pkl/admin_invoice_setup.php');break; 
+					case 'invois_cicilan'			: cmodul('602'); include('invoice/invois_cicilan/invoice_setup.php');break; 
+					case 'invois_dr'			: cmodul('602'); include('invoice/invois_dr/invoice_setup.php');break; 
 				
 				## Posting 
 					case 'posting_air_ipl'		: cmodul('603'); include('posting/air_ipl/air_ipl_setup.php');break; 

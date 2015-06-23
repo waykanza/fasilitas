@@ -9,7 +9,7 @@ $conn = conn();
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Program Fasilitas</title>
+<title>Program Pembayaran Fasilitas </title>
 <link type="image/x-icon" rel="icon" href="images/favicon.ico">
 
 <!-- CSS -->
@@ -68,8 +68,8 @@ body { height:100%; }
 				<td><input type="password" id="pass_user" name="pass_user"></td>
 			</tr>
 			<tr>
-				<td></td>
-				<td class="text-right"><input type="submit" value="Login"></td>
+			
+				<td colspan=2><button type="submit" id="login" style="width:260px;"><b>Login</b></button></td>
 			</tr>
 			</table>
 		</form>

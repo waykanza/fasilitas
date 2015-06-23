@@ -11,7 +11,7 @@ jQuery(function($) {
 <ul id="nav">
 	<li><a href="">Master</a>
 		<ul>
-			<li><a href="<?php echo base64_encode('parameter'); ?>">Parameter</a></li>
+			<!--<li><a href="<?php echo base64_encode('parameter'); ?>">Parameter</a></li>-->
 			<li><a href="<?php echo base64_encode('sektor'); ?>">Sektor</a></li>
 			<li><a href="<?php echo base64_encode('cluster'); ?>">Cluster</a></li>
 			<li><a href="<?php echo base64_encode('blok'); ?>">Blok</a></li>
@@ -68,7 +68,12 @@ jQuery(function($) {
 					<li><a href="<?php echo base64_encode('tarif_pkl'); ?>">Tarif</a></li>
 				</ul>
 			</li>
-			<li><a href="<?php echo base64_encode('pelanggan'); ?>">Pelanggan</a></li>
+			<li><a href="">Pelanggan <span></span></a>
+				<ul>
+					<li><a href="<?php echo base64_encode('periode_mp'); ?>">Media Promosi</a></li>
+					<li><a href="<?php echo base64_encode('periode_pkl'); ?>">Pedagang Kaki 5</a></li>
+				</ul>
+			</li>
 			
 			<!-- 
 			<li><a href="">Kegiatan Shooting / Pemotretan <span></span></a>
@@ -88,14 +93,24 @@ jQuery(function($) {
 			-->
 		</ul>
 	</li>
+
+	<li><a href="">Invoice</a>
+		<ul>
+            <li><a href="<?php echo base64_encode('invois_mp'); ?>">Media Promosi</a></li>
+			<li><a href="<?php echo base64_encode('invois_pkl'); ?>">Pedagang Kaki Lima</a></li>
+			<li><a href="<?php echo base64_encode('admin_invois_mp'); ?>">Hapus Invoice Media Promosi</a></li>
+			<li><a href="<?php echo base64_encode('admin_invois_pkl'); ?>">Hapus Invoice Pedagang Kaki Lima</a></li>
+		</ul>
+	</li>
 	
+	<!--
 	<li><a href="">Proses Tagihan</a>
 		<ul>
             <li><a href="<?php echo base64_encode('periode_mp'); ?>">Periode Media Promosi</a></li>
 			<li><a href="<?php echo base64_encode('periode_sl'); ?>">Periode Sewa Lahan</a></li>
 		</ul>
 	</li>
-	
+	-->
 	<li><a href="">Bank</a>
 		<ul>
 			<li><a href="<?php echo base64_encode('export_bank'); ?>">Export</a></li>
@@ -108,7 +123,10 @@ jQuery(function($) {
             <li><a href="">Fasilitas <span></span></a>
 				<ul>
 					<li><a href="<?php echo base64_encode('pembayaran_mp'); ?>">Pembayaran Media Promosi</a></li>
-                    <li><a href="">Pembayaran Pedagang Kaki Lima <span></span></a>
+                    <li><a href="<?php echo base64_encode('pembayaran_pkl'); ?>">Pembayaran Pedagang Kaki Lima</a></li>
+                    <li><a href="<?php echo base64_encode('admin_pembayaran_mp'); ?>">Admin Pembayaran Media Promosi</a></li>
+                    <li><a href="<?php echo base64_encode('admin_pembayaran_pkl'); ?>">Admin Pembayaran Pedagang Kaki Lima</a></li>
+                    	<!--
                     	<ul>
                         	<li><a href="<?php echo base64_encode('pembayaran_pkl_baru'); ?>">Pelanggan Baru PKL</a></li>
                             <li><a href="<?php echo base64_encode('pembayaran_pkl_perpanjang'); ?>">Perpanjang Sewa</a></li>
@@ -126,6 +144,7 @@ jQuery(function($) {
 	<li><a href="">Laporan <span></span></a>
 		<ul>
 			<li><a href="">Fasilitas<span></span></a>
+				<!--
 				<ul>
 					<li><a href="">Rencana <span></span></a>
 						<ul>
@@ -156,17 +175,24 @@ jQuery(function($) {
 					<li><a href="<?php echo base64_encode('pelanggan_daftar'); ?>">Daftar</a></li>
 				</ul>
 			</li>
-			
+			-->
+			<ul>
+				<li><a href="<?php echo base64_encode('laporan_mp'); ?>">Media Promosi</a></li>
+				<li><a href="<?php echo base64_encode('laporan_pkl'); ?>">Pedagang Kaki Lima</a></li>
+			</ul>
 			<li><a href="<?php echo base64_encode('daftar_faktur_pajak'); ?>">Daftar Faktur Pajak</a></li>
 		</ul>
 	</li>
 	
 	<li><a href="">Utilitas <span></span></a>
-		<ul>
+		<ul><!--
 			<li><a href="">Invoice <span></span></a>
 				<ul>
-					<li><a href="<?php echo base64_encode('ai_invoice'); ?>">Fasilitas</a></li>
-					<li><a href="<?php echo base64_encode('dp_invoice'); ?>">Deposit</a></li>
+							<li><a href="<?php echo base64_encode('invois_mp'); ?>">Media Promosi</a></li>
+							<li><a href="<?php echo base64_encode('invois_sl'); ?>">Sewa Lahan</a></li>
+							<li><a href="<?php echo base64_encode('invois_cicilan'); ?>">Cicilan</a></li>
+							<li><a href="<?php echo base64_encode('invois_dr'); ?>">Driving Range</a></li>
+
 				</ul>
 			</li>
 			<li><a href="<?php echo base64_encode('posting_air_ipl'); ?>">Posting Pembayaran</a></li>
@@ -177,7 +203,7 @@ jQuery(function($) {
 					<li><a href="<?php echo base64_encode('fp_posting'); ?>">Posting</a></li>
 				</ul>
 			</li>
-			
+			-->
 			<li><a href="<?php echo base64_encode('user_management'); ?>">User Management</a></li>
 			<li><a href="<?php echo base64_encode(''); ?>">User's Log</a></li>
 			

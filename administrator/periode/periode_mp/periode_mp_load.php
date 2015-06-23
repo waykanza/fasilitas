@@ -55,6 +55,7 @@ $page_start = (($page_num-1) * $per_page);
 <table class="t-data wm100">
 <tr>
 	<th rowspan="2">NO.</th>
+	<th rowspan="2">NO VA</th>
 	<th rowspan="2">NAMA <br> PELANGGAN</th>
 	<th colspan="3">MEDIA PROMOSI</th>
 	<th colspan="2">PERIODE</th>
@@ -62,7 +63,7 @@ $page_start = (($page_num-1) * $per_page);
 	<th colspan="2">BIAYA<br>STRATEGIS</th>
 	<th colspan="2">DISCOUNT</th>
 	<th colspan="3">NILAI TAGIHAN</th>
-	<th rowspan="2">CARA PEMBAYARAN</th>
+	<th rowspan="2">STATUS</th>
 </tr>
 <tr>
 	<th colspan="1">JENIS</th>
@@ -84,11 +85,9 @@ if ($total_data > 0)
 {
 	$query = "
 	SELECT *
-	FROM KWT_PEMBAYARAN_MP_DETAIL a
-	
-	LEFT JOIN KWT_PEMBAYARAN_MP b ON a.NO_PELANGGAN = b.NO_PELANGGAN	
-	LEFT JOIN KWT_LOKASI_MP c ON b.KODE_LOKASI = c.KODE_LOKASI
-	LEFT JOIN KWT_TIPE_MP d ON b.KODE_TIPE = d.KODE_TIPE
+	FROM PELANGGAN_MP a	
+	LEFT JOIN KWT_LOKASI_MP c ON a.KODE_LOKASI = c.KODE_LOKASI
+	LEFT JOIN KWT_TIPE_MP d ON a.KODE_TIPE = d.KODE_TIPE
 	$query_search
 	ORDER BY a.NO_PELANGGAN DESC
 	";
@@ -98,7 +97,7 @@ if ($total_data > 0)
 	$i = 1 + $page_start;
 	while( ! $obj->EOF)
 	{
-		$id = $obj->fields['NO_PELANGGAN'];
+		$id = $obj->fields['ID_PEMBAYARAN'];
 		$pembayaran = $obj->fields['PEMBAYARAN'];
 		
 		if ($obj->fields['KODE_MP'] == 'A') {
@@ -155,6 +154,7 @@ if ($total_data > 0)
 		?>
 		<tr class="onclick" id="<?php echo $id; ?>"> 
 			<td class="text-center"><?php echo $i; ?></td>
+			<td><?php echo $obj->fields['NO_PELANGGAN']; ?></td>
 			<td><?php echo $obj->fields['NAMA_PELANGGAN']; ?></td>
 			<td><?php echo $kode_mp; ?></td>
 			<td><?php echo $obj->fields['NAMA_TIPE']; ?></td>
@@ -168,8 +168,15 @@ if ($total_data > 0)
 			<td class="text-right"><?php echo to_money($obj->fields['NILAI_KURANG']); ?></td>
 			<td class="text-right"><?php echo to_money($obj->fields['TOTAL']); ?></td>
 			<td class="text-right"><?php echo to_money($obj->fields['NILAI_PPN']); ?></td>
-			<td class="text-right"><?php echo to_money($obj->fields['TOTAL_BAYAR']); ?></td>
-			<td><?php echo $satuan; ?></td>
+			<td class="text-right"><?php echo to_money($obj->fields['TOTAL_BAYAR']); ?></td>	
+			<td class="text-right">
+				<?php if($obj->fields['STATUS']==0){
+					echo '<a style = "color : red;">non-aktif</a>';
+				} else{
+					echo '<a style = "color : green;">aktif</a>';
+			}
+				?>
+			</td>
 		</tr>
 		<?php
 		$i++;

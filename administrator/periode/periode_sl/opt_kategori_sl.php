@@ -2,7 +2,7 @@
 require_once('../../../config/config.php');
 $conn = conn();
 
-$kode_mp = (isset($_REQUEST['kode_mp'])) ? clean($_REQUEST['kode_mp']) : '';
+$nama = (isset($_REQUEST['nama'])) ? clean($_REQUEST['nama']) : '';
 
 $echo = '<option value="" data-key-mp="" data-tarif="0"> -- KATEGORI -- </option>';
 

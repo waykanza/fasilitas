@@ -30,7 +30,7 @@ require_once('functions.php');
 
 #============== APPLICATION ==============
 define('BASE_URL', 'http://localhost/fasilitas/');
-define('APP_DIR', 'D:\\uwamp\\www\\pkb\\');
+define('APP_DIR', 'D:\\xampp\\www\\pkb\\');
 define('EXPORT_PATH', APP_DIR . 'vb\\export\\');
 define('IMPORT_PATH', APP_DIR . 'vb\\import\\');
 
@@ -38,7 +38,7 @@ define('IMPORT_PATH', APP_DIR . 'vb\\import\\');
 define('DNS', TRUE);
 
 define('DRIVER', 'mssql');
-define('HOST', 'way\SQLEXPRESS');
+define('HOST', 'IRVAN\SQLEXPRESS');
 define('DB', 'dbfasilitas');
 define('USR', '');
 define('PWD', '');

@@ -6,14 +6,14 @@ function conn()
 {
 	if (DNS)
 	{
-		$conn =&ADONewConnection('odbc_'.DRIVER);
+		$conn =ADONewConnection('odbc_'.DRIVER);
 		$conn->SetFetchMode(ADODB_FETCH_BOTH);
 		$dsn = 'Driver={SQL Server};Server='.HOST.';Database='.DB.';';
 		$conn->Connect($dsn, USR, PWD) or die('Failed Connected to SQL Server');
 	}
 	else
 	{
-		$conn =&ADONewConnection(DRIVER);
+		$conn =ADONewConnection(DRIVER);
 		$conn->SetFetchMode(ADODB_FETCH_BOTH);
 		$conn->Connect(HOST, USR, PWD, DB) or die('Failed Connected to SQL Server');
 	}

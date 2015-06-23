@@ -10,55 +10,29 @@ $conn = conn();
 <!-- CSS -->
 <link type="text/css" href="../../../config/css/style.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/css/zebra/default.css" rel="stylesheet">
+<link type="text/css" href="../../../plugin/css/zebra/jquery-ui.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/window/themes/default.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/window/themes/mac_os_x.css" rel="stylesheet">
 
 <!-- JS -->
 <script type="text/javascript" src="../../../plugin/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../../plugin/js/jquery-ui.js"></script>
+
 <script type="text/javascript" src="../../../plugin/js/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="../../../plugin/js/jquery.inputmask.custom.js"></script>
 <script type="text/javascript" src="../../../plugin/js/keymaster.js"></script>
 <script type="text/javascript" src="../../../plugin/js/zebra_datepicker.js"></script>
-<script type="text/javascript" src="../../../plugin/window/javascripts/prototype.js"></script>
+<!--<script type="text/javascript" src="../../../plugin/window/javascripts/prototype.js"></script>-->
 <script type="text/javascript" src="../../../plugin/window/javascripts/window.js"></script>
 <script type="text/javascript" src="../../../config/js/main.js"></script>
 <script type="text/javascript">
-/* lookup */
-function get_lookup(nk)
-{
-	if (nk.length == 0) {
-		jQuery('#wrap_lookup').fadeOut(); 
-	} else if (nk.length >= 3) {
-		jQuery.post(base_master + 'pelanggan_lookup.php?act=list&no_va=' + nk, function(data) { 
-			jQuery('#lookup_pelanggan').html(data);
-			if (data == '') {
-				jQuery('#wrap_lookup').fadeOut(); 
-			} else {
-				jQuery('#wrap_lookup').fadeIn(); 
-			}
-		});
-	}
-}
-
-function cls_lookup() { jQuery('#wrap_lookup').fadeOut(); }
-
-function pp(nk)
-{
-	jQuery('#wrap_lookup').fadeOut();
-	jQuery.post(base_master + 'pelanggan_lookup.php?act=sel&no_va=' + nk, function(data) {
-		jQuery('#no_va').val(data.no_va);
-		jQuery('#nama_pelanggan').val(data.nama_pelanggan);
-		jQuery('#no_telepon').val(data.no_telepon);
-		jQuery('#alamat').val(data.alamat);
-	}, 'json');
-}
-
-
 function clear()
 {
 	jQuery('#ukuran, #key_mpd, #tarif').val('');	
 }
-
+function clear_nilai(){
+	jQuery('#persen_nilai_kurang-1, #persen_nilai_tambah-1, #nilai_kurang-1, #nilai_tambah-1').val('0');
+}
 function calculate(id)
 {
 	clear();	
@@ -69,56 +43,82 @@ function calculate(id)
 	var 
 		key_mpd			= sel_kode_lokasi.data('key-mpd'),
 		tarif			= sel_kode_lokasi.data('tarif').toString(),
-		pembayaran			= jQuery('#pembayaran').val(),
-		persen_nilai_tambah	= jQuery('#persen_nilai_tambah-'+id).val(),
-		persen_nilai_kurang	= jQuery('#persen_nilai_kurang-'+id).val();
+		nilai_tambah 	= jQuery('#nilai_tambah-1').val();
+		nilai_kurang 	= jQuery('#nilai_kurang-1').val();
+		periode 		= jQuery('#periode').val();
+		//pembayaran			= jQuery('#pembayaran').val(),
+		//persen_nilai_tambah	= jQuery('#persen_nilai_tambah-'+id).val(),
+		//persen_nilai_kurang	= jQuery('#persen_nilai_kurang-'+id).val();
 	
 	tarif					= (tarif == '') ? 0 : parseFloat(tarif);
-	pembayaran				= (pembayaran == '') ? 0 : parseFloat(pembayaran);
-	persen_nilai_tambah		= (persen_nilai_tambah == '') ? 0 : parseFloat(persen_nilai_tambah);
-	persen_nilai_kurang		= (persen_nilai_kurang == '') ? 0 : parseFloat(persen_nilai_kurang);	
+	nilai_tambah 			= (nilai_tambah == '') ? 0 : conv(nilai_tambah);
+	nilai_kurang 			= (nilai_kurang == '') ? 0 : conv(nilai_kurang);
+	periode 				= (periode == '') ? 0 : parseFloat(periode);
+	//pembayaran				= (pembayaran == '') ? 0 : parseFloat(pembayaran);
+	//persen_nilai_tambah		= (persen_nilai_tambah == '') ? 0 : parseFloat(persen_nilai_tambah);
+	//persen_nilai_kurang		= (persen_nilai_kurang == '') ? 0 : parseFloat(persen_nilai_kurang);	
 	
-	if ((jQuery('#kode_mp').val() == 'A') || (jQuery('#kode_mp').val() == 'B')){
-		tarifperbulan 	= tarif / 12;
-		tarif2		= pembayaran * tarifperbulan;
-	} else{
-		tarif2		= pembayaran * tarif;
-	}
+	//if ((jQuery('#kode_mp').val() == 'A') || (jQuery('#kode_mp').val() == 'B')){
+	//	tarifperbulan 	= tarif / 12;
+	//	tarif2		= pembayaran * tarifperbulan;
+	//} else{
+	//	tarif2		= pembayaran * tarif;
+	//}
 	
 	//tarifperbulan 	= tarif / 12;
 	//tarif2		= pembayaran * tarifperbulan;
 	
-	nilai_tambah = (tarif2 * persen_nilai_tambah) / 100;
-	nilai_kurang = (tarif2 * persen_nilai_kurang) / 100;
-	total		 = tarif2 + nilai_tambah - nilai_kurang;
+	total		 = (tarif*periode) + nilai_tambah - nilai_kurang;
 	//total	     = Math.round(total23/1000) * 1000;
 	
 	
 	jQuery('#key_mpd').val(key_mpd);
 	jQuery('#tarif').val(tarif);
-	jQuery('#pembayaran').val(pembayaran);
-	jQuery('#tarif2').val(tarif2);
-	jQuery('#persen_nilai_tambah-'+id).val(persen_nilai_tambah);
-	jQuery('#persen_nilai_kurang-'+id).val(persen_nilai_kurang);
-	jQuery('#nilai_tambah-'+id).val(nilai_tambah);
-	jQuery('#nilai_kurang-'+id).val(nilai_kurang);
+	//jQuery('#pembayaran').val(pembayaran);
+	//jQuery('#tarif2').val(tarif2);
 	jQuery('#total-'+id).val(total);
-	
-	
-	
+}
+
+function calculate_nilai(){
+	var
+		periode 			= jQuery('#periode').val(),
+		tarif 				= jQuery('#tarif').val(),
+		persen_nilai_kurang = jQuery('#persen_nilai_kurang-1').val(),
+		persen_nilai_tambah = jQuery('#persen_nilai_tambah-1').val();
+
+	total = (tarif == '') ? 0 : conv(tarif);
+	total = periode * total;
+	persen_nilai_kurang = (persen_nilai_kurang == '') ? 0 : parseFloat(persen_nilai_kurang);
+	persen_nilai_tambah = (persen_nilai_tambah == '') ? 0 : parseFloat(persen_nilai_tambah);
+	nilai_kurang = (persen_nilai_kurang/100)*total;
+	nilai_tambah = (persen_nilai_tambah/100)*total;
+	jQuery('#nilai_kurang-1').val(nilai_kurang);
+	jQuery('#nilai_tambah-1').val(nilai_tambah);
+	calculate(1);
+}
+function conv(x){
+	 return parseFloat(x.replace(',','').replace(',','').replace(',',''));
+}
+function calculate_persen(){
+	var
+		periode 			= jQuery('#periode').val(),
+		tarif 				= jQuery('#tarif').val(),
+		nilai_kurang 		= jQuery('#nilai_kurang-1').val(),
+		nilai_tambah 		= jQuery('#nilai_tambah-1').val();
+
+	total = (tarif == '') ? 0 : conv(tarif);
+	total = periode * total;
+	nilai_kurang = (nilai_kurang == '') ? 0 : conv(nilai_kurang);
+	nilai_tambah = (nilai_tambah == '') ? 0 : conv(nilai_tambah);
+	persen_nilai_kurang = (nilai_kurang/total)*100;
+	persen_nilai_tambah = (nilai_tambah/total)*100;
+	jQuery('#persen_nilai_kurang-1').val(persen_nilai_kurang);
+	jQuery('#persen_nilai_tambah-1').val(persen_nilai_tambah);
+	calculate(1);
 }
 
 jQuery(function($) {
-	$('#no_va').on('keyup', function(e) {
-		e.preventDefault();
-		get_lookup(this.value);
-		return false;
-	});
-	$(document).on('click', '#cari', function(e) {
-		e.preventDefault();
-		var url = base_periode + 'periode_mp/cari.php';
-		return false;
-	});
+	
 	$('#kode_mp').on('change', function(e) {
 		e.preventDefault();
 		$('#kode_tipe').load(base_periode + 'periode_mp/opt_kategori_mp.php?kode_mp=' + $(this).val());
@@ -157,15 +157,20 @@ jQuery(function($) {
 		return false;
 	});
 	
-	$('#kode_tipe, #kode_lokasi, #kode_mp, #pembayaran').on('change', function(e) {
+	$('#kode_tipe, #kode_lokasi, #kode_mp, #pembayaran,#periode').on('change', function(e) {
 		e.preventDefault();
-		calculate();
+		clear_nilai();
+		calculate(1);
 		return false;
 	});
 	
 	$(document).on('change', '.persen_nilai_tambah, .persen_nilai_kurang', function(e) {
-		var id = $(this).parents('tr').find( ".ini_id" ).val();
-		calculate(id);
+		calculate_nilai();
+		return false;
+	});
+
+	$(document).on('change', '.nilai_tambah, .nilai_kurang', function(e) {
+		calculate_persen();
 		return false;
 	});
 	
@@ -203,6 +208,7 @@ jQuery(function($) {
 	
 	$('#tarif').inputmask('numeric', { repeat: '9' });
 	$('#tarif2').inputmask('numeric', { repeat: '9' });
+	$('#periode').inputmask('numeric', { repeat: '3' });
 	$('#pembayaran').inputmask('numeric', { repeat: '6' });
 	$('.persen_nilai_tambah').inputmask('percent', { integerDigits:3, fractionalDigits:9, groupSize:3 });
 	$('.persen_nilai_kurang').inputmask('percent', { integerDigits:3, fractionalDigits:9, groupSize:3 });
@@ -215,8 +221,7 @@ jQuery(function($) {
 		format: 'd-m-Y'
 	});
 });
-
-
+/*
 function add_blok()
 {
 	var max = Number(jQuery('#max').val());
@@ -261,8 +266,7 @@ function del_blok(id)
 	
 	return false;
 }
-
-
+*/
 
 </script>
 </head>
@@ -271,24 +275,21 @@ function del_blok(id)
 
 <table class="w50 f-left">
 <tr><td width="120">NO VIRTUAL ACCOUNT</td><td>
-<input type="text" name="no_va" id="no_va" size="30" autocomplete="off" value="" maxlength="30">
-<input type="button" id="cari" value=" Cari ">
-<!--
-<div id="wrap_lookup">
-	<div id="lookup_close"><span onclick="cls_lookup()">Tutup [X]</span></div>
-	<div id="lookup_pelanggan"></div>
+	<input type="text" id="no_va" name="no_va">
 </div>
--->
 </td></tr>
 
 <tr><td>NAMA PELANGGAN</td><td>
-<input type="text" name="nama_pelanggan" id="nama_pelanggan" size="40" value=""></td></tr>
+<textarea name="nama_pelanggan" id="nama" size="5"></textarea></td></tr>
 
 <tr><td>NO TELEPON</td><td>
-<input type="text" name="no_telepon" id="no_telepon" size="20" value=""></td></tr>
+<textarea name="no_telepon" id="telepon" size="5"></textarea></td></tr>
 
 <tr><td>ALAMAT</td><td>
-<textarea name="alamat" id="alamat" rows="3" cols="40"></textarea></td></tr>
+<textarea name="alamat" id="jalan" rows="3" cols="40"></textarea></td></tr>
+
+<tr><td>NPWP</td><td>
+<textarea name="npwp" id="npwp" size="10"></textarea></td></tr>
 
 </table>
 
@@ -322,7 +323,14 @@ function del_blok(id)
 <input readonly="readonly" type="text" name="key_mpd" id="key_mpd" size="13" value=""></td></tr>
 
 <tr><td>TARIF</td><td>
-<input readonly="readonly" type="text" name="tarif" id="tarif" size="13" value=""><span id="tahun"> / Tahun</span></tr>
+<input readonly="readonly" type="text" name="tarif" id="tarif" size="13" value=""><span id="tahun">/ Tahun</span></tr>
+
+<tr><td>PERIODE</td><td>
+<input type="text" name="periode" id="periode" size="13" value="1"><span id="periode_type"> Tahun</span></tr>
+
+<tr><td>KODE BLOK</td><td>
+<input type="text" name="kode_blok" id="kode_blok" size="3" value="1"></tr>
+
 
 <tr><td>KETERANGAN</td><td>
 <textarea name="keterangan" id="keterangan" rows="3" cols="40"></textarea></td></tr>
@@ -337,16 +345,18 @@ function del_blok(id)
 <hr><br>
 
 <table class="t-popup wauto">
+<!--
 <tr>
 	<td width="120">CARA PEMBAYARAN</td>
 	<td><input type="text" name="pembayaran" id="pembayaran" size="15" value="0"><span class="satuan"> Bulan</span></td>
-</tr>	
+</tr>
+
 <tr>	
 	<td>TARIF</td>
 	<td><input type="text" name="tarif2" id="tarif2" size="15" value="0" readonly="readonly"></td>
 </tr>
 </table>
-
+-->	
 <div class="clear"></div>
 <br><br>
 
@@ -373,12 +383,15 @@ function del_blok(id)
 	<td><input type="text" name="periode_awal-1" id="periode_awal-1" class="periode_awal" size="15" value=""></td>
 	<td><input type="text" name="periode_akhir-1" id="periode_akhir-1" class="periode_akhir" size="15" value=""></td>
 	<td><input type="text" name="persen_nilai_tambah-1" id="persen_nilai_tambah-1" class="persen_nilai_tambah" size="15" value="0"></td>
-	<td><input type="text" name="nilai_tambah-1" id="nilai_tambah-1" class="nilai_tambah" size="15" value="0" readonly="readonly"></td>
+	<td><input type="text" name="nilai_tambah-1" id="nilai_tambah-1" class="nilai_tambah" size="15" value="0"></td>
 	<td><input type="text" name="persen_nilai_kurang-1" id="persen_nilai_kurang-1" class="persen_nilai_kurang" size="15" value="0"></td>
-	<td><input type="text" name="nilai_kurang-1" id="nilai_kurang-1" class="nilai_kurang" size="15" value="0" readonly="readonly"></td>
+	<td><input type="text" name="nilai_kurang-1" id="nilai_kurang-1" class="nilai_kurang" size="15" value="0"></td>
 	<td><input type="text" name="total-1" id="total-1" class="total" size="15" value="0" readonly="readonly"></td>
+	
+	<!--
 	<td><input type="button" value=" + " onclick="add_blok()">
 		<input type="hidden" value="1" class="ini_id">
+		-->
 	</td>
 </tr>
 </table>
@@ -398,4 +411,52 @@ function del_blok(id)
 
 </body>
 </html>
+<!--
+<script>
+$(function() {
+    <?php
+	$obj = $conn->execute("
+	SELECT 
+		f.NO_PELANGGAN
+	FROM FSL_PELANGGAN f
+	ORDER BY f.NO_PELANGGAN ASC");
+	?>
+	
+	 var availableTags = [
+    <?php 
+	while( ! $obj->EOF)
+	{
+		$ov = $obj->fields['NO_PELANGGAN'];
+		echo '"';
+		echo $ov;
+		echo '",';
+		$obj->movenext();
+	}
+    ?>  
+    ];
+    $( "#no_va" ).autocomplete({
+      source: availableTags
+    });
+  });
+  
+    $(document).ready(function() {
+        $('#no_va').change(function() {
+            var value = $(this).val();
+            alert(value);
+            $(this).val(value.replace(/00040E-/i, ''));
+        });
+    });         
+function tampil_data(){
+	no_va = document.getElementById('no_va').value;
+	$.post('cari.php?no_va='+no_va, function(result)
+	{
+		var data = result.split("|");
+		$("#jalan").html(data[2]);
+		$("#nama").html(data[0]);
+		$("#telepon").html(data[1]);
+	});
+	
+}
+</script>
+-->
 <?php close($conn); ?>

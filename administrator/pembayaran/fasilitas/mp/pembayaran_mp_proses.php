@@ -4,7 +4,7 @@ require_once('../../../../config/config.php');
 $conn = conn();
 $msg = '';
 $error = FALSE;
-
+error_reporting(0);
 $id = (isset($_REQUEST['id'])) ? base64_decode(clean($_REQUEST['id'])) : '';
 
 $tgl_bayar 		= (isset($_REQUEST['tgl_bayar'])) ? clean($_REQUEST['tgl_bayar']) : '';
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 		$conn->begintrans();
 		
 		$query="
-			UPDATE KWT_PEMBAYARAN_MP_DETAIL
+			UPDATE PELANGGAN_MP
 			SET TANGGAL_BAYAR=CONVERT(DATETIME,'$tgl_bayar',105), JENIS_BAYAR ='$jenis_bayar', KODE_BANK='$kode_bank', NO_REKENING='$no_rekening', KETERANGAN='$keterangan', 
 			CREATED_DATE=getdate(), STATUS_BAYAR=2, KASIR='$kasir'
 			WHERE ID_PEMBAYARAN = '$id'
@@ -51,15 +51,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 	echo json_encode($json);
 	exit;
 }
+
 else
 {
 	$query="
 		SELECT *
-		FROM 
-			KWT_PEMBAYARAN_MP_DETAIL a
-			LEFT JOIN KWT_PEMBAYARAN_MP b ON a.NO_PELANGGAN = b.NO_PELANGGAN	
-			LEFT JOIN KWT_LOKASI_MP c ON b.KODE_LOKASI = c.KODE_LOKASI
-			LEFT JOIN KWT_TIPE_MP d ON b.KODE_TIPE = d.KODE_TIPE
+			FROM PELANGGAN_MP a	
+			LEFT JOIN KWT_LOKASI_MP c ON a.KODE_LOKASI = c.KODE_LOKASI
+			LEFT JOIN KWT_TIPE_MP d ON a.KODE_TIPE = d.KODE_TIPE
 			LEFT JOIN KWT_BANK e ON a.KODE_BANK = e.KODE_BANK
 		WHERE
 			ID_PEMBAYARAN = '$id'
@@ -148,7 +147,7 @@ else
 	$jenis_bayar			= jenis_bayar($obj->fields['JENIS_BAYAR']);
 	$kode_bank				= $obj->fields['NAMA_BANK'].' ('.$obj->fields['KODE_BANK'].')';
 	$no_rekening			= $obj->fields['NO_REKENING'];
-	$no_kwitansi			= $obj->fields['NO_KWITANSI'];
+	$no_kwitansi			= $obj->fields['ID_PEMBAYARAN'];
 	$keterangan				= $obj->fields['KETERANGAN'];
 }
 

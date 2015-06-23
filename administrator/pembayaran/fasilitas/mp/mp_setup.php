@@ -7,6 +7,8 @@
 	<td>
 		<select name="field1" id="field1">
 			<option value="NAMA_PELANGGAN"> NAMA </option>
+			<option value="NO_PELANGGAN"> NO PELANGGAN </option>
+			<option value="KODE_BLOK"> KODE BLOK </option>
 		</select>
 		<input type="text" name="search1" id="search1" class="apply" value="">
 	</td>
@@ -102,7 +104,7 @@ function loadData()
 
 function showPopup(id)
 {
-	var url = base_pembayaran_fasilitas + 'mp/pembayaran_mp_popup.php?id=' + id;
+	var url = base_pembayaran_fasilitas + 'mp/admin_pembayaran_mp_popup.php?id=' + id;
 	setPopup('Pembayaran Media Promosi', url, 800, 600);
 	
 	return false;

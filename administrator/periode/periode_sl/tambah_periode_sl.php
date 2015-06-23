@@ -10,51 +10,23 @@ $conn = conn();
 <!-- CSS -->
 <link type="text/css" href="../../../config/css/style.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/css/zebra/default.css" rel="stylesheet">
+<link type="text/css" href="../../../plugin/css/zebra/jquery-ui.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/window/themes/default.css" rel="stylesheet">
 <link type="text/css" href="../../../plugin/window/themes/mac_os_x.css" rel="stylesheet">
 
 <!-- JS -->
 <script type="text/javascript" src="../../../plugin/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="../../../plugin/js/jquery-ui.js"></script>
+
 <script type="text/javascript" src="../../../plugin/js/jquery-migrate-1.2.1.min.js"></script>
 <script type="text/javascript" src="../../../plugin/js/jquery.inputmask.custom.js"></script>
 <script type="text/javascript" src="../../../plugin/js/keymaster.js"></script>
 <script type="text/javascript" src="../../../plugin/js/zebra_datepicker.js"></script>
-<script type="text/javascript" src="../../../plugin/window/javascripts/prototype.js"></script>
+<!--<script type="text/javascript" src="../../../plugin/window/javascripts/prototype.js"></script>-->
 <script type="text/javascript" src="../../../plugin/window/javascripts/window.js"></script>
 <script type="text/javascript" src="../../../config/js/main.js"></script>
 <script type="text/javascript">
-/* lookup 
-function get_lookup(nk)
-{
-	if (nk.length == 0) {
-		jQuery('#wrap_lookup').fadeOut(); 
-	} else if (nk.length >= 3) {
-		jQuery.post(base_master + 'pelanggan_lookup.php?act=list&no_ktp=' + nk, function(data) { 
-			jQuery('#lookup_pelanggan').html(data);
-			if (data == '') {
-				jQuery('#wrap_lookup').fadeOut(); 
-			} else {
-				jQuery('#wrap_lookup').fadeIn(); 
-			}
-		});
-	}
-}
 
-function cls_lookup() { jQuery('#wrap_lookup').fadeOut(); }
-
-function pp(nk)
-{
-	jQuery('#wrap_lookup').fadeOut();
-	jQuery.post(base_master + 'pelanggan_lookup.php?act=sel&no_ktp=' + nk, function(data) {
-		jQuery('#no_ktp').val(data.no_ktp);
-		jQuery('#nama_pelanggan').val(data.nama_pelanggan);
-		jQuery("#npwp").val(data.npwp);
-		jQuery('#no_telepon').val(data.no_telepon);
-		jQuery('#no_hp').val(data.no_hp);
-		jQuery('#alamat').val(data.alamat);
-	}, 'json');
-}
-*/
 function calculate(id)
 {
 	var 
@@ -89,12 +61,32 @@ function calculate(id)
 }
 
 jQuery(function($) {
-	$('#no_ktp').on('keyup', function(e) {
+	$('#nama').on('change', function(e) {
 		e.preventDefault();
-		get_lookup(this.value);
+		$('#kode_tipe').load(base_periode + 'periode_sl/opt_kategori_sl.php?kode_mp=' + $(this).val());
+		clear();
 		return false;
 	});
 	
+	$('#kode_tipe').on('change', function(e) {
+		e.preventDefault();
+		var 
+			sel_kode_tipe	= jQuery('#kode_tipe option:selected'),
+			key_mp			= sel_kode_tipe.data('key-mp');
+			
+		$('#kode_lokasi').load(base_periode + 'periode_mp/opt_lokasi_mp.php?key_mp=' + key_mp);
+		
+		
+		var sel_kode_tipe	= jQuery('#kode_tipe option:selected'),
+			ukuran1	= sel_kode_tipe.data('ukuran1');
+			ukuran2	= sel_kode_tipe.data('ukuran2');
+		if(typeof(ukuran1) === 'undefined') { ukuran1 = '0'; };	if(typeof(ukuran2) === 'undefined') { ukuran2 = '0'; };			
+		jQuery('#ukuran').html(ukuran1+' - '+ukuran2+' m&sup2;');
+	
+		
+		clear();
+		return false;
+	});
 	$('#tarif, #pembayaran, #lokasi').on('change', function(e) {
 		e.preventDefault();
 		calculate();
@@ -132,7 +124,9 @@ jQuery(function($) {
 		
 		return false;
 	});
-	
+	key('alt+s', function(e) { e.preventDefault(); $('#save').trigger('click'); });
+	key('alt+r', function(e) { e.preventDefault(); $('#reset').trigger('click'); });
+	key('esc', function(e) { e.preventDefault(); $('#close').trigger('click'); });
 	
 	$('#tarif').inputmask('numeric', { repeat: '9' });
 	$('#pembayaran').inputmask('numeric', { repeat: '6' });
@@ -202,41 +196,52 @@ function del_blok(id)
 <form name="form" id="form" method="post">
 
 <table class="w50 f-left">
-<tr><td width="120">NO KTP</td><td>
-<input type="text" name="no_ktp" id="no_ktp" size="30" autocomplete="off" value="" maxlength="30">
-<!--
-<div id="wrap_lookup">
-	<div id="lookup_close"><span onclick="cls_lookup()">Tutup [X]</span></div>
-	<div id="lookup_pelanggan"></div>
+<tr><td width="120">NO VIRTUAL ACCOUNT</td><td>
+	<input type="text" id="no_va" onBlur="javascript:tampil_data(); return false;">
 </div>
--->
 </td></tr>
 
 <tr><td>NAMA PELANGGAN</td><td>
-<input type="text" name="nama_pelanggan" id="nama_pelanggan" size="40" value=""></td></tr>
-
-<tr><td>NPWP</td><td>
-<input type="text" name="npwp" id="npwp" size="20" value=""></td></tr>
+<textarea readonly name="nama_pelanggan" id="nama" size="5"></textarea></td></tr>
 
 <tr><td>NO TELEPON</td><td>
-<input type="text" name="no_telepon" id="no_telepon" size="20" value=""></td></tr>
-
-<tr><td>NO HP</td><td>
-<input type="text" name="no_hp" id="no_hp" size="20" value=""></td></tr>
+<textarea readonly="readonly"  name="no_telepon" id="telepon" size="5"></textarea></td></tr>
 
 <tr><td>ALAMAT</td><td>
-<textarea name="alamat" id="alamat" rows="3" cols="40"></textarea></td></tr>
+<textarea readonly="readonly" name="alamat" id="jalan" rows="3" cols="40"></textarea></td></tr>
 
 </table>
 
 
 <table class="t-popup wauto">
+<tr><td>KATEGORI</td><td>
+<!--
+<select name="kode_tipe" id="kode_tipe">
+	<option value="" data-key-mp="" data-tarif="0"> -- KATEGORI -- </option>
+</select>
+</td></tr>
+
+<tr><td></td><td id="ukuran" style="padding-bottom:15px;"></td></tr>
+
+<tr><td width="120">LOKASI</td><td>
+<select name="kode_lokasi" id="kode_lokasi">
+	<option value="0" data-key-mpd='' data-tarif='' data-ukuran1='' data-ukuran2=''> -- LOKASI -- </option>
+</select>
+</td></tr>
+
+<tr><td>KODE TARIF</td><td>
+<input readonly="readonly" type="text" name="key_mpd" id="key_mpd" size="13" value=""></td></tr>
+
+<tr><td>TARIF</td><td>
+<input readonly="readonly" type="text" name="tarif" id="tarif" size="13" value=""><span id="tahun"> / Bulan</span></tr>
+-->
 
 <tr><td width="120">LOKASI</td><td>
 <input type="text" name="lokasi" id="lokasi" size="40" value=""></td></tr>
 
 <tr><td>TARIF</td><td>
 <input type="text" name="tarif" id="tarif" size="13" value=""></td></tr>
+
 
 <tr><td>KETERANGAN</td><td>
 <textarea name="keterangan" id="keterangan" rows="3" cols="40"></textarea></td></tr>
@@ -298,9 +303,9 @@ function del_blok(id)
 <table class="t-popup">
 <tr>
 	<td class="td-action">
-		<input type="submit" id="save" value=" Simpan ">
-		<input type="reset" id="reset" value=" Reset ">
-		<input type="button" id="close" value=" Tutup "></td>
+		<input type="submit" id="save" value=" Simpan (Alt+S) ">
+		<input type="reset" id="reset" value=" Reset (Alt+R) ">
+		<input type="button" id="close" value=" Tutup (Esc) "></td>
 	</td>
 </tr>
 </table>
@@ -308,4 +313,51 @@ function del_blok(id)
 
 </body>
 </html>
+
+<script>
+$(function() {
+    <?php
+	$obj = $conn->execute("
+	SELECT 
+		f.NO_PELANGGAN
+	FROM FSL_PELANGGAN f
+	ORDER BY f.NO_PELANGGAN ASC");
+	?>
+	
+	 var availableTags = [
+    <?php 
+	while( ! $obj->EOF)
+	{
+		$ov = $obj->fields['NO_PELANGGAN'];
+		echo '"';
+		echo $ov;
+		echo '",';
+		$obj->movenext();
+	}
+    ?>  
+    ];
+    $( "#no_va" ).autocomplete({
+      source: availableTags
+    });
+  });
+  
+    $(document).ready(function() {
+        $('#no_va').change(function() {
+            var value = $(this).val();
+            alert(value);
+            $(this).val(value.replace(/00040E-/i, ''));
+        });
+    });         
+function tampil_data(){
+	no_va = document.getElementById('no_va').value;
+	$.post('cari.php?no_va='+no_va, function(result)
+	{
+		var data = result.split("|");
+		$("#jalan").html(data[2]);
+		$("#nama").html(data[0]);
+		$("#telepon").html(data[1]);
+	});
+	
+}
+</script>
 <?php close($conn); ?>

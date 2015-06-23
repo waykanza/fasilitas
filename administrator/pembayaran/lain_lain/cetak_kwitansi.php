@@ -21,6 +21,7 @@ $terbilang = new Terbilang;
 	}
 	.newpage {page-break-before:always;}
 }
+	
 table {
 	border-collapse: collapse;
 }

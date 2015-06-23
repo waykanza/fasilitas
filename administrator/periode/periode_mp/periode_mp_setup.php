@@ -72,7 +72,7 @@ jQuery(function($) {
 	$(document).on('click', '#tambah', function(e) {
 		e.preventDefault();
 		var url = base_periode + 'periode_mp/tambah_periode_mp.php';
-		setPopup('Tambah Periode Media Promosi', url, 1000, winHeight-100);
+		setPopup('Master Pelanggan Media Promosi', url, 1000, winHeight-100);
 		return false;
 	});
 	
@@ -95,7 +95,6 @@ function loadData()
 	
 	return false;
 }
-/*
 function showPopup(id)
 {
 	var url = base_periode + 'periode_mp/pelanggan_mp_popup.php?id=' + id;
@@ -103,7 +102,6 @@ function showPopup(id)
 	
 	return false;
 }
-*/
 </script>
 
 <div id="t-detail"></div>

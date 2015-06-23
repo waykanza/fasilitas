@@ -12,7 +12,7 @@ $search1	= (isset($_REQUEST['search1'])) ? clean($_REQUEST['search1']) : '';
 $nama_pelanggan = (isset($_REQUEST['nama_pelanggan'])) ? clean($_REQUEST['nama_pelanggan']) : '';
 $status_bayar	= (isset($_REQUEST['status_bayar'])) ? clean($_REQUEST['status_bayar']) : '';
 
-$query_search = " WHERE NO_KTP != 'XX' ";
+$query_search = " WHERE NO_PELANGGAN != 'XX' ";
 
 if ($search1 != '')
 {
@@ -34,14 +34,9 @@ if ($search1 != '')
 
 # Pagination
 $query = "
-SELECT COUNT(a.ID_PEMBAYARAN) AS TOTAL
-	FROM KWT_PEMBAYARAN_MP_DETAIL a
-	
-	LEFT JOIN KWT_PEMBAYARAN_MP b ON a.NO_PELANGGAN = b.NO_PELANGGAN	
-	LEFT JOIN KWT_LOKASI_MP c ON b.KODE_LOKASI = c.KODE_LOKASI
-	LEFT JOIN KWT_TIPE_MP d ON b.KODE_TIPE = d.KODE_TIPE
+SELECT COUNT(ID_PEMBAYARAN) AS TOTAL from PELANGGAN_MP
+$query_search
 
-	$query_search
 ";
 $total_data = $conn->Execute($query)->fields['TOTAL'];
 $total_page = ceil($total_data/$per_page);
@@ -75,7 +70,7 @@ $page_start = (($page_num-1) * $per_page);
 	<th colspan="2">BIAYA<br>STRATEGIS</th>
 	<th colspan="2">DISCOUNT</th>
 	<th colspan="3">NILAI TAGIHAN</th>
-	<th rowspan="2">CARA PEMBAYARAN</th>
+	<!--<th rowspan="2">CARA PEMBAYARAN</th>-->
 	<th rowspan="2">STATUS BAYAR</th>
 </tr>
 <tr>
@@ -98,12 +93,9 @@ if ($total_data > 0)
 {
 	$query = "
 	SELECT *
-	FROM KWT_PEMBAYARAN_MP_DETAIL a
-	
-	LEFT JOIN KWT_PEMBAYARAN_MP b ON a.NO_PELANGGAN = b.NO_PELANGGAN	
-	LEFT JOIN KWT_LOKASI_MP c ON b.KODE_LOKASI = c.KODE_LOKASI
-	LEFT JOIN KWT_TIPE_MP d ON b.KODE_TIPE = d.KODE_TIPE
-	
+	FROM PELANGGAN_MP a
+	LEFT JOIN KWT_LOKASI_MP c ON a.KODE_LOKASI = c.KODE_LOKASI
+	LEFT JOIN KWT_TIPE_MP d ON a.KODE_TIPE = d.KODE_TIPE
 	$query_search
 	ORDER BY a.NO_PELANGGAN DESC
 	";
@@ -184,7 +176,7 @@ if ($total_data > 0)
 			<td class="text-right"><?php echo to_money($obj->fields['TOTAL']); ?></td>
 			<td class="text-right"><?php echo to_money($obj->fields['NILAI_PPN']); ?></td>
 			<td class="text-right"><?php echo to_money($obj->fields['TOTAL_BAYAR']); ?></td>
-			<td><?php echo $satuan; ?></td>
+			<!--<td><?php echo $satuan; ?></td>-->
 			<td class="text-center"><?php echo status_bayar($obj->fields['STATUS_BAYAR']); ?></td>
 		</tr>
 		<?php

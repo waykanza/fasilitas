@@ -25,7 +25,6 @@ $terbilang = new Terbilang;
 <script type="text/javascript" src="../../../../config/js/main.js"></script>
 <script type="text/javascript">
 
-
 jQuery(function($) {
 	
 	key('alt+s', function(e) { e.preventDefault(); $('#save').trigger('click'); });
@@ -55,25 +54,6 @@ jQuery(function($) {
 		
 		return false;
 	});
-	
-	$('#batal').on('click', function(e) {
-		e.preventDefault();
-		var 
-			url			= base_pembayaran_fasilitas + 'mp/batal_mp_proses.php',
-			data		= $('#form').serialize();
-
-		$.post(url, data, function(data) {
-			
-			alert(data.msg);
-			if (data.error == false)
-			{
-				location.reload();
-			}
-		}, 'json');
-		
-		return false;
-	});
-	
 		
 	$('#cetak').on('click', function(e) {
 		e.preventDefault();
@@ -97,8 +77,8 @@ jQuery(function($) {
 		$('#btgl_bayar').val('<?php echo $tanggal_bayar; ?>');
 		$('#bjenis_bayar').val('<?php echo $jenis_bayar; ?>');
 		$('#bkode_bank').val('<?php echo $kode_bank; ?>');
-		$('#bno_rekening').val('<?php echo $no_rekening; ?>');
 		$('#bno_kwitansi').val('<?php echo $no_kwitansi; ?>');
+		$('#bno_rekening').val('<?php echo $no_rekening; ?>');
 		$('#bketerangan').val('<?php echo $keterangan; ?>');
 		//$('#bkasir').val('<?php echo $kasir; ?>');
 		
@@ -133,12 +113,12 @@ table.smf td:nth-child(2) {
 
 <!--=========== PELANGGAN ===========-->
 <table class="smf t-popup wauto f-left" style="margin-right:100px">
-	<tr><td>NO. KTP</td><td>:</td><td><?php echo $no_ktp; ?></td></tr>
+	<!--<tr><td>NO. KTP</td><td>:</td><td><?php echo $no_ktp; ?></td></tr>-->
 	<tr><td>NAMA PELANGGAN</td><td>:</td><td><?php echo $nama_pelanggan; ?></td></tr>
 	<tr><td>NPWP</td><td>:</td><td><?php echo $npwp; ?></td></tr>
 	<tr><td>ALAMAT</td><td>:</td><td><?php echo $alamat; ?></td></tr>
 	<tr><td>NO. TELEPON</td><td>:</td><td><?php echo $no_tlp; ?></td></tr>
-	<tr><td>NO. HP</td><td>:</td><td><?php echo $no_hp; ?></td></tr>
+	<!--<tr><td>NO. HP</td><td>:</td><td><?php echo $no_hp; ?></td></tr>-->
 	
 	<tr><td>MEDIA PROMOSI</td><td>:</td><td><?php echo $mp; ?></td></tr>	
 	<tr><td>KATEGORI</td><td>:</td><td><?php echo $kategori; ?></td></tr>	
@@ -146,12 +126,12 @@ table.smf td:nth-child(2) {
 	<tr><td>TARIF</td><td>:</td><td><?php echo 'Rp. '.$tarif.$tahun;?></td></tr>
 	
 	<tr><td>PERIODE</td><td>:</td><td><?php echo $awal; ; echo ' s/d '; echo $akhir; ?></td></tr>
-	<tr><td>CARA PEMBAYARAN</td><td>:</td><td><?php echo $satuan;?></td></tr>
+	<!--<tr><td>CARA PEMBAYARAN</td><td>:</td><td><?php echo $satuan;?></td></tr>-->
 </table>
 
 
 <table class="smf t-popup wauto" style="">
-	<tr><td>TARIF</td><td>=</td><td>Rp.</td><td size="50" align="right"><?php echo $tarif2; ?></td><td>(<?php echo $satuan; ?>)</td></tr>
+	<!--<tr><td>TARIF</td><td>=</td><td>Rp.</td><td size="50" align="right"><?php echo $tarif2; ?></td><td>(<?php echo $satuan; ?>)</td></tr>-->
 	<tr><td>BIAYA STRATEGIS</td><td>=</td><td>Rp.</td><td align="right"><?php echo $nilai_tambah; ?></td><td>(<?php echo $persen_nilai_tambah; ?>%)</td></tr>
 	<tr><td>DISCOUNT</td><td>=</td><td>Rp.</td><td align="right"><?php echo $nilai_kurang; ?></td><td>(<?php echo $persen_nilai_kurang; ?>%)</td></tr>
 	<tr><td></td><td colspan="4"><hr></td></tr>
@@ -184,32 +164,24 @@ table.smf td:nth-child(2) {
 	<select name="jenis_bayar" id="jenis_bayar">
 		<option value=""> -- JENIS BAYAR -- </option>
 		<option value="2"> K. DEBIT </option>
-		<option value="3"> K. KREDIT </option>
-		<option value="4"> T. BANK </option>
+		<option value="4"> TRANSFER </option>
 	</select>
 	</td></tr>
 
+	<?php $obj = $conn->execute("SELECT BANK, NO_REKENING, KODE_BANK FROM KWT_PARAMETER ");?>
 	<tr><td>KODE BANK</td><td>
-	<select name="kode_bank" id="kode_bank">
-		<option value=""> -- KODE BANK -- </option>
-		<?php
-		$obj = $conn->execute("SELECT KODE_BANK, NAMA_BANK FROM KWT_BANK ORDER BY NAMA_BANK ASC");
-		while( ! $obj->EOF)
-		{
-			$ov = $obj->fields['KODE_BANK'];
-			$on = $obj->fields['NAMA_BANK'];
-			echo "<option value='$ov'> $on ($ov) </option>";
-			$obj->movenext();
-		}
-		?>
-	</select>
+	<input type="text" readonly="readonly" name="kode_bank" id="kode_bank" value="<?php echo $obj->fields['KODE_BANK'];?>">
+	</td></tr>
+
+	<tr><td>NAMA BANK</td><td>
+	<input type="text" readonly="readonly" name="nama_bank" id="nama_bank" value="<?php echo $obj->fields['BANK'];?>">
 	</td></tr>
 
 	<tr id="tr-no_rekening"><td>NO REKENING</td>
-	<td><input type="text" name="no_rekening" id="no_rekening" size="40" value=""></td></tr>
+	<td><input type="text" readonly="readonly" name="no_rekening" id="no_rekening" size="40" value="<?php echo $obj->fields['NO_REKENING'];?>"></td></tr>
 
 	<tr><td>NO KWITANSI</td>
-	<td><input readonly="readonly" type="text" name="no_kwitansi" id="no_kwitansi" size="40" value=""></td></tr>
+	<td><input readonly="readonly" type="text" name="no_kwitansi" id="no_kwitansi" size="40" value="<?php echo $no_kwitansi;?>"></td></tr>
 
 	<tr><td>KETERANGAN BAYAR</td>
 	<td><textarea name="keterangan" id="keterangan" rows="3" cols="40"></textarea></td></tr>
@@ -229,7 +201,7 @@ table.smf td:nth-child(2) {
 	<td><input readonly="readonly" type="text" name="bno_rekening" id="bno_rekening" size="40" value=""></td></tr>
 
 	<tr><td>NO KWITANSI</td>
-	<td><input readonly="readonly" type="text" name="bno_kwitansi" id="bno_kwitansi" size="40" value=""></td></tr>
+	<td><input readonly="readonly" type="text" name="bno_kwitansi" id="bno_kwitansi" size="40"></td></tr>
 
 	<tr><td>KETERANGAN BAYAR</td>
 	<td><textarea readonly="readonly" name="bketerangan" id="bketerangan" rows="3" cols="40"></textarea></td></tr>
@@ -241,7 +213,6 @@ table.smf td:nth-child(2) {
 	<td></td>
 	<td class="td-action">
 		<input type="button" id="save" value=" Simpan (Alt+S) ">
-		<input type="button" id="batal" value=" Batal (Alt+B) ">
 		<input type="button" id="cetak" value=" Cetak Kwitansi (Alt+P) ">
 		<input type="button" id="close" value=" Tutup (Esc) ">
 	</td>
